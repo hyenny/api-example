@@ -17,11 +17,10 @@ script: "./gradlew clean build"
 before_install:
   - chmod +x gradlew
 
-# CI 실행 완료시 메일로 알람
-notifications:
-  email:
-    recipients:
-      - hyein.dev@gmail.com
+before_deploy:
+  - zip -r api-example *
+  - mkdir -p deploy
+  - mv api-example.zip deploy/api-example.zip
 
 deploy:
   - provider: s3
@@ -31,7 +30,14 @@ deploy:
     region: ap-northeast-2
     skip_cleanup: true
     acl: public_read
+    local_dir: deploy
     wait-until-deployed: true
     on:
       repo: hyenny/api-example
       branch: master
+
+# CI 실행 완료시 메일로 알람
+notifications:
+  email:
+    recipients:
+      - hyein.dev@gmail.com
