@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@RequestMapping("/api/boards")
+@RequestMapping("/api/v1/boards")
 @RestController
 public class BoardController {
 
