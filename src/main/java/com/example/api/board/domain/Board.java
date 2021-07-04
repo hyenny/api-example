@@ -35,4 +35,10 @@ public class Board {
         this.createdDate = LocalDateTime.now();
         this.updatedDate = LocalDateTime.now();
     }
+
+    public void update(Board board) {
+        title = board.title;
+        content = board.content;
+        updatedDate = LocalDateTime.now();
+    }
 }
