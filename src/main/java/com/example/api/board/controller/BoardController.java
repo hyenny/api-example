@@ -6,12 +6,13 @@ import com.example.api.board.domain.BoardResponse;
 import com.example.api.board.service.BoardService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RequestMapping("/api/v1/boards")
@@ -39,9 +40,9 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BoardResponse>> list() {
-        List<Board> boards = boardService.findBoards();
-        return new ResponseEntity<>(boards.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<Page<Board>> list(@PageableDefault(size = 5, sort="createdDate") Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize());
+        return new ResponseEntity<>(boardService.findBoards(pageable), HttpStatus.OK);
     }
 
     @DeleteMapping("/{boardId}")
