@@ -7,9 +7,11 @@ import com.example.api.board.service.BoardService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +42,9 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Board>> list(@PageableDefault(size = 5, sort="createdDate") Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize());
-        return new ResponseEntity<>(boardService.findBoards(pageable), HttpStatus.OK);
+    public ResponseEntity<PagedModel<EntityModel<Board>>> list(@PageableDefault(size = 5, sort="createdDate") Pageable pageable, PagedResourcesAssembler<Board> assembler) {
+        Page<Board> boards = boardService.findBoards(pageable);
+        return new ResponseEntity<>(assembler.toModel(boards), HttpStatus.OK);
     }
 
     @DeleteMapping("/{boardId}")

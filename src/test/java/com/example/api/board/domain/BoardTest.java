@@ -10,7 +10,6 @@ class BoardTest {
     @Test
     void create() {
         Board board = Board.builder()
-                .id(1L)
                 .title("title")
                 .content("내용입니다.")
                 .build();

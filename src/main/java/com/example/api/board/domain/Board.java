@@ -28,8 +28,7 @@ public class Board {
     private LocalDateTime updatedDate;
 
     @Builder
-    public Board(Long id, String title, String content, LocalDateTime createdDate, LocalDateTime updatedDate) {
-        this.id = id;
+    public Board(String title, String content, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.title = title;
         this.content = content;
         this.createdDate = LocalDateTime.now();
